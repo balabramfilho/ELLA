@@ -4,7 +4,7 @@
 
 from math import log
 import numpy as np
-from scipy.misc import logsumexp
+from scipy.special import logsumexp
 from scipy.linalg import sqrtm, inv, norm
 from sklearn.linear_model import LinearRegression, Ridge, LogisticRegression, Lasso
 import matplotlib.pyplot as plt
@@ -63,7 +63,7 @@ class ELLA(object):
         theta_t = single_task_model.coef_
 
         sparse_encode = Lasso(alpha = self.mu / (X.shape[0] * 2.0),
-                              fit_intercept = False).fit(D_t_sqrt.dot(self.L),
+                              fit_intercept = False, tol=1e9, max_iter=50000).fit(D_t_sqrt.dot(self.L),
                                                          D_t_sqrt.dot(theta_t.T))
         if self.k_init and task_id < self.k:
             sparse_coeffs = np.zeros((self.k,))
